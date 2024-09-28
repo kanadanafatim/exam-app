@@ -18,7 +18,7 @@
                <top>
                   <AnchorPane prefHeight="61.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button fx:id="boutonAccueil" layoutX="443.0" layoutY="14.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="99.0" style="-fx-cursor: hand; -fx-background-color: transparent; -fx-border-color: #444444; -fx-background-radius: 50; -fx-border-radius: 50;" text="Accueil" textFill="#4a4a4a">
+                        <Button fx:id="boutonAccueil" layoutX="443.0" layoutY="14.0" mnemonicParsing="false" onAction="#afficherPageAccueil" prefHeight="34.0" prefWidth="99.0" style="-fx-cursor: hand; -fx-background-color: transparent; -fx-border-color: #444444; -fx-background-radius: 50; -fx-border-radius: 50;" text="Accueil" textFill="#4a4a4a">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font></Button>
@@ -34,12 +34,12 @@
                <center>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane fx:id="ecranAccueil" prefHeight="336.8" prefWidth="602.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="ecranAccueil" prefHeight="336.8" prefWidth="602.4" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <Button fx:id="boutonResultat" layoutX="215.0" layoutY="218.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="172.0" style="-fx-background-color: #025EAF; -fx-background-radius: 50; -fx-cursor: hand;" text="Voir mon résultat" textFill="WHITE" />
+                              <Button fx:id="boutonResultat" layoutX="215.0" layoutY="218.0" mnemonicParsing="false" onAction="#afficherPageRecherche" prefHeight="41.0" prefWidth="172.0" style="-fx-background-color: #025EAF; -fx-background-radius: 50; -fx-cursor: hand;" text="Voir mon résultat" textFill="WHITE" />
                               <HBox alignment="CENTER" layoutY="80.0" prefHeight="100.0" prefWidth="602.0">
                                  <children>
-                                    <Label fx:id="labelPct" alignment="CENTER" prefHeight="99.0" prefWidth="590.0" text="50 %" textFill="#4caf50">
+                                    <Label fx:id="labelPct" alignment="CENTER" prefHeight="99.0" prefWidth="590.0" text="50 %" textFill="#848484">
                                        <font>
                                           <Font name="Arial Bold" size="80.0" />
                                        </font>
@@ -48,33 +48,37 @@
                               </HBox>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="ecranResultat" prefHeight="336.8" prefWidth="602.4" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="ecranRecherche" prefHeight="336.8" prefWidth="602.4" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <TextField alignment="CENTER" layoutX="24.0" layoutY="19.0" prefHeight="35.0" prefWidth="188.0" promptText="Entrez votre matricule" style="-fx-border-radius: 50; -fx-background-radius: 50;">
+                              <TextField fx:id="champMatricule" alignment="CENTER" layoutX="24.0" layoutY="19.0" prefHeight="35.0" prefWidth="188.0" promptText="Entrez votre matricule" style="-fx-border-radius: 50; -fx-background-radius: 50;">
                                  <font>
                                     <Font size="14.0" />
                                  </font></TextField>
-                              <Button layoutX="59.0" layoutY="63.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="111.0" style="-fx-background-color: #025EAF; -fx-background-radius: 50;" text="Rechercher" textFill="WHITE" />
-                              <Button layoutX="240.0" layoutY="264.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="121.0" style="-fx-background-color: #025EAF; -fx-background-radius: 50;" text="Afficher les détails" textFill="WHITE" />
-                              <HBox alignment="CENTER" layoutY="112.0" prefHeight="100.0" prefWidth="602.0">
+                              <Button fx:id="boutonRechercherResultat" layoutX="59.0" layoutY="63.0" mnemonicParsing="false" onAction="#rechercherResultat" prefHeight="38.0" prefWidth="111.0" style="-fx-background-color: #025EAF; -fx-background-radius: 50; -fx-cursor: hand;" text="Rechercher" textFill="WHITE" />
+                              <AnchorPane fx:id="conteneurApresRecherche" layoutX="8.0" layoutY="131.0" prefHeight="200.0" prefWidth="589.0" visible="false">
                                  <children>
-                                    <Label text="Admis(e)" textFill="#4caf50">
-                                       <font>
-                                          <Font name="Arial Bold" size="48.0" />
-                                       </font>
-                                    </Label>
+                                    <HBox alignment="CENTER" prefHeight="79.0" prefWidth="590.0">
+                                       <children>
+                                          <Label fx:id="statutResultat" prefHeight="59.0" prefWidth="210.0" text="Admis(e)" textFill="#848484">
+                                             <font>
+                                                <Font name="Arial Bold" size="48.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <Button fx:id="boutonAfficherDetails" layoutX="234.0" layoutY="135.0" mnemonicParsing="false" onAction="#afficherPageDetails" prefHeight="41.0" prefWidth="122.0" style="-fx-background-color: #025EAF; -fx-background-radius: 50; -fx-cursor: hand;" text="Afficher les détails" textFill="WHITE" />
                                  </children>
-                              </HBox>
+                              </AnchorPane>
                            </children>
                         </AnchorPane>
-                        <AnchorPane layoutY="7.0" prefHeight="336.8" prefWidth="602.4" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="ecranDetails" layoutY="7.0" prefHeight="336.8" prefWidth="602.4" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <Label layoutX="65.0" layoutY="120.0" text="Matricule">
                                  <font>
                                     <Font name="Arial Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="64.0" layoutY="133.0" prefHeight="35.0" prefWidth="89.0" text="0072902">
+                              <Label fx:id="etudiantMatricule" layoutX="64.0" layoutY="133.0" prefHeight="35.0" prefWidth="89.0" text="0072493">
                                  <font>
                                     <Font name="Arial Italic" size="12.0" />
                                  </font>
@@ -84,7 +88,7 @@
                                     <Font name="Arial Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="65.0" layoutY="76.0" prefHeight="35.0" prefWidth="164.0" text="Adjumany Yann Axel Vianney">
+                              <Label fx:id="etudiantNomPrenoms" layoutX="65.0" layoutY="76.0" prefHeight="35.0" prefWidth="178.0" text="YEO Tiepegue Kanadana Fatim">
                                  <font>
                                     <Font name="Arial Italic" size="12.0" />
                                  </font>
@@ -94,7 +98,7 @@
                                     <Font name="Arial Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="65.0" layoutY="185.0" prefHeight="35.0" prefWidth="95.0" text="09/05/03">
+                              <Label fx:id="etudiantDateNaissance" layoutX="65.0" layoutY="185.0" prefHeight="35.0" prefWidth="95.0" text="23/05/03">
                                  <font>
                                     <Font name="Arial Italic" size="12.0" />
                                  </font>
@@ -104,7 +108,7 @@
                                     <Font name="Arial Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="66.0" layoutY="234.0" prefHeight="35.0" prefWidth="134.0" text="PIGIER CI">
+                              <Label fx:id="etudiantEcole" layoutX="66.0" layoutY="234.0" prefHeight="35.0" prefWidth="134.0" text="PIGIER CI">
                                  <font>
                                     <Font name="Arial Italic" size="12.0" />
                                  </font>
@@ -116,7 +120,7 @@
                               </Label>
                               <HBox alignment="CENTER" layoutX="332.0" layoutY="118.0" prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <Label text="14.10" textFill="#4caf50">
+                                    <Label fx:id="moyenneEt" text="8.10" textFill="#848484">
                                        <font>
                                           <Font name="System Bold" size="60.0" />
                                        </font>

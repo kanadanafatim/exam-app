@@ -26,7 +26,7 @@ public class BaseController {
 	protected Alert alert;
 	protected Data data;
 
-	
+
 	protected Connection connection() {
 		Connection connexion = null;
 
@@ -68,30 +68,28 @@ public class BaseController {
 		Connection connection = connection();
 		
 		if (connection != null) {
-			String query = "SELECT * FROM resultat INNER JOIN etudiant"
-					+ "WHERE resultat.matricule_etudiant = etudiant.matricule"
+			String query = "SELECT * FROM resultat INNER JOIN etudiant "
+					+ "WHERE resultat.matricule_etudiant = etudiant.matricule "
 					+ "AND resultat.matricule_etudiant = ?";
 			try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-				pstmt.setString(0, matricule);
+				pstmt.setString(1, matricule);
 				ResultSet rs = pstmt.executeQuery();
 				
 				if (rs.next()) {
-					while(rs.next()) {
-						data.setNom(rs.getString("nom"));
-						data.setPnom(rs.getString("prenoms"));
-						data.setMatricule(rs.getString("matricule"));
-						data.setDate_naissance(rs.getString("date_naissance"));
-						data.setEcole(rs.getString("ecole"));
-						data.setMoyenne(rs.getDouble("moyenne"));
-						data.setStatut_examen(rs.getInt("statut"));
-					}
-					
+					data = new Data();
+					data.setNom(rs.getString("nom"));
+					data.setPnom(rs.getString("prenoms"));
+					data.setMatricule(rs.getString("matricule"));
+					data.setDate_naissance(rs.getString("date_naissance"));
+					data.setEcole(rs.getString("ecole"));
+					data.setMoyenne(rs.getDouble("moyenne"));
+					data.setStatut_examen(rs.getBoolean("statut"));
+
 					return true;
 				} else {
 					alert = new Alert(AlertType.INFORMATION);
 					alert.setTitle("Information");
 					alert.setContentText("Matricule non reconnu.");
-					alert.show();
 				}
 			} catch (SQLException e) {
 				alert = new Alert(AlertType.ERROR);

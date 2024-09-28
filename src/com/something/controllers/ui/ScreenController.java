@@ -6,6 +6,8 @@ import java.util.ResourceBundle;
 
 import com.something.controllers.BaseController;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -20,15 +22,27 @@ public class ScreenController extends BaseController implements Initializable {
 
 	@FXML
 	private Label labelPct;
-	
-	@FXML
-	private Label moyenneEt;
 
 	@FXML
 	private TextField champMatricule;
 
 	@FXML
 	private Label statutResultat;
+	
+	@FXML
+	private Label etudiantNomPrenoms;
+	
+	@FXML
+	private Label etudiantMatricule;
+	
+	@FXML
+	private Label etudiantDateNaissance;
+	
+	@FXML
+	private Label etudiantEcole;
+
+	@FXML
+	private Label moyenneEt;
 	
 	@FXML
 	private AnchorPane ecranAccueil;
@@ -43,10 +57,8 @@ public class ScreenController extends BaseController implements Initializable {
 	private AnchorPane ecranDetails;
 
 	
-	List<AnchorPane> listEcrans = List.of(
-			ecranAccueil, ecranRecherche, ecranDetails
-					);
-	
+	ObservableList<AnchorPane> listEcrans;
+
 	@FXML
 	private void afficherPageRecherche() {
 		navigate(ecranRecherche, listEcrans);
@@ -59,6 +71,12 @@ public class ScreenController extends BaseController implements Initializable {
 	
 	@FXML
 	private void afficherPageDetails() {
+		etudiantNomPrenoms.setText(String.format("%s %s", data.getNom(), data.getPnom()));
+		etudiantDateNaissance.setText(data.getDate_naissance());
+		etudiantMatricule.setText(data.getMatricule());
+		etudiantEcole.setText(data.getEcole());
+		moyenneEt.setText(String.valueOf(data.getMoyenne()));
+		
 		navigate(ecranDetails, listEcrans);
 	}
 	
@@ -76,6 +94,9 @@ public class ScreenController extends BaseController implements Initializable {
 				String matricule = champMatricule.getText();
 
 				if (getResult(matricule)) {
+					setTextColor(moyenneEt, data.getMoyenne(), true);
+					setTextColor(statutResultat, data.getStatut_examen(), false);
+
 					afficherConteneurApresRecherche();
 				}
 			} catch (NumberFormatException e) {
@@ -93,26 +114,41 @@ public class ScreenController extends BaseController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		fetch();
+		
+		listEcrans = FXCollections.observableArrayList(
+			ecranAccueil, ecranRecherche, ecranDetails
+		);
 
 		labelPct.setText(df.format(rate) + " %");
-		conteneurApresRecherche.setVisible(false);
 		
-		setTextColor(labelPct);
-		setTextColor(moyenneEt);
-		setTextColor(statutResultat);
+		setTextColor(labelPct, rate, false);
 	}
 
-	private void setTextColor(Label label) {
-		if (Double.parseDouble(label.getText()) >= 50) {
-			label.setTextFill(Color.valueOf("4caf50"));
-		} else {
-			label.setTextFill(Color.valueOf("c70000"));
+	private <T> void setTextColor(Label label, T value, Boolean isAvg) {
+		if (value instanceof Double && !isAvg) {
+			if ((Double) value >= 50) {
+				label.setTextFill(Color.valueOf("#4caf50"));
+			} else {
+				label.setTextFill(Color.valueOf("#c70000"));
+			}
+		} else if (value instanceof Double && isAvg) {
+			if ((Double) value >= 10) {
+				label.setTextFill(Color.valueOf("#4caf50"));
+			} else {
+				label.setTextFill(Color.valueOf("#c70000"));
+			}
+		} else if (value instanceof Boolean) {
+			if ((Boolean) value == true) {
+				label.setTextFill(Color.valueOf("#4caf50"));
+			} else {
+				label.setTextFill(Color.valueOf("#c70000"));
+			}
 		}
 	}
-	
+
 	private void afficherConteneurApresRecherche() {
 		if (data != null) {
-			statutResultat.setText(data.getStatut_examen());
+			statutResultat.setText(data.getStatut_examen() ? "Admis(e)" : "Refusé(e)");
 			conteneurApresRecherche.setVisible(true);
 		}
 	}
