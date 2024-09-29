@@ -21,16 +21,17 @@ Lorsqu’il clique sur "Afficher les détails" l’application affiche :
   
 # Prototype commenté de la base de données
 Nom de la base de données : db0072493
-TABLES :<br>
-•	`etudiant` 
+TABLES :
+<br>
+`etudiant` 
 -	matricule : stocke le matricule de l’étudiant.
 -	nom : stocke le nom de l’étudiant.
 -	prenoms : stocke les prenoms de l’étudiant.
 -	date_naissance : stocke la date de naissance de l’étudiant.
 -	ecole : stocke le nom de l’école de l’étudiant.
 <br>
-•	`resultat` 
--	Idresultat : identifiant unique des résultats
+`resultat`
+- Idresultat : identifiant unique des résultats
 -	Matricule_etudiant : pour faire reférence a la table Etudiant.
 -	moyenne : stocke la moyenne obtenue à l’examen sur 20. 
 -	statut : stocke le statut de l’étudiant, il indique s’il a réussi ou échoué à l’examen. 
