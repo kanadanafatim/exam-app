@@ -73,6 +73,9 @@ public class ScreenController extends BaseController implements Initializable {
     // Méthode appelée lorsque l'utilisateur clique sur le bouton "Accueil" dans l'écran de recherche
     @FXML
     private void afficherPageAccueil() {
+    	champMatricule.setText(null);
+    	statutResultat.setVisible(false);
+    	boutonAfficherDetails.setVisible(false);
         navigate(ecranAccueil, listEcrans);
     }
 
@@ -196,6 +199,7 @@ public class ScreenController extends BaseController implements Initializable {
             statutResultat.setText(data.getStatut_examen() ? "Admis(e)" : "Refusé(e)");
             conteneurApresRecherche.setVisible(true);
             boutonAfficherDetails.setVisible(true);
+            statutResultat.setVisible(true);
         }
     }
 }
