@@ -1,9 +1,9 @@
-package com.something.controllers.ui;
+package com.example.controllers.ui;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import com.something.controllers.BaseController;
+import com.example.controllers.BaseController;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -52,9 +53,13 @@ public class ScreenController extends BaseController implements Initializable {
 
     @FXML
     private AnchorPane conteneurApresRecherche;
+    
+    @FXML
+    private Button boutonAfficherDetails;
 
     @FXML
     private AnchorPane ecranDetails;
+
 
     // Liste observable d'AnchorPane pour l'écran d'accueil, l'écran de recherche et l'écran de détails
     ObservableList<AnchorPane> listEcrans;
@@ -81,6 +86,12 @@ public class ScreenController extends BaseController implements Initializable {
         etudiantEcole.setText(data.getEcole());
         moyenneEt.setText(String.valueOf(data.getMoyenne()));
 
+        statutResultat.setText(null);
+        boutonAfficherDetails.setVisible(false);
+
+        // Stocker la page retour
+        recentPage = ecranRecherche;
+
         // Navigue vers l'écran de détails
         navigate(ecranDetails, listEcrans);
     }
@@ -99,13 +110,23 @@ public class ScreenController extends BaseController implements Initializable {
                 String matricule = champMatricule.getText();
 
                 // Récupère les données de résultat de l'étudiant en utilisant la méthode getResult()
-                if (getResult(matricule)) {
+                if (getResult(matricule) != null) {
                     // Définit la couleur du texte des étiquettes en fonction de la moyenne de l'étudiant et de son statut d'examen
                     setTextColor(moyenneEt, data.getMoyenne(), true);
                     setTextColor(statutResultat, data.getStatut_examen(), false);
 
                     // Affiche les données de l'étudiant dans l'écran de détails
                     afficherConteneurApresRecherche();
+                } else {
+                	if (noDataFoundError) {
+                		alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Information");
+                        alert.setContentText("Matricule introuvable.");
+                	} else if (sqlError) {
+                		alert = new Alert(AlertType.ERROR);
+                        alert.setTitle("Erreur");
+                        alert.setContentText("Erreur lors de l'exécution de la requête.");
+                	}
                 }
             } catch (NumberFormatException e) {
                 alert = new Alert(AlertType.ERROR);
@@ -119,6 +140,13 @@ public class ScreenController extends BaseController implements Initializable {
             alert.showAndWait();
         }
     }
+    
+    @FXML
+    private void afficherPageRecente() {
+    	if (recentPage != null) {
+    		navigate(recentPage, listEcrans);
+    	}
+    }
 
     // Méthode appelée après que le fichier FXML a été chargé
     @Override
@@ -128,7 +156,7 @@ public class ScreenController extends BaseController implements Initializable {
 
         // Initialise la liste observable d'AnchorPane
         listEcrans = FXCollections.observableArrayList(
-                ecranAccueil, ecranRecherche, ecranDetails
+        		ecranAccueil, ecranRecherche, ecranDetails
         );
 
         // Définit le texte de l'étiquette labelPct au taux de réussite, formaté en pourcentage
@@ -167,6 +195,7 @@ public class ScreenController extends BaseController implements Initializable {
         if (data != null) {
             statutResultat.setText(data.getStatut_examen() ? "Admis(e)" : "Refusé(e)");
             conteneurApresRecherche.setVisible(true);
+            boutonAfficherDetails.setVisible(true);
         }
     }
 }

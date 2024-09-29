@@ -1,10 +1,10 @@
-package com.something.ui;
+package com.example.ui;
 
 import java.net.URL;
 
 
 public enum FXMLPage {
-    SCREEN("/com/something/ui/fxml/ecran.fxml");
+    SCREEN("/com/example/ui/fxml/ecran.fxml");
 
     private final String location;
 

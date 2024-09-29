@@ -1,4 +1,4 @@
-package com.something.controllers;
+package com.example.controllers;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,10 +9,9 @@ import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import com.something.model.Data;
+import com.example.model.Data;
 
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 
 public class BaseController {
@@ -29,6 +28,9 @@ public class BaseController {
     // Objets Alert et Data
     protected Alert alert;
     protected Data data;
+    protected AnchorPane recentPage;
+    protected Boolean noDataFoundError = false;
+    protected Boolean sqlError = false;
 
     // Méthode pour établir une connexion à la base de données
     protected Connection connection() {
@@ -36,7 +38,7 @@ public class BaseController {
 
         try {
             connexion = DriverManager.getConnection(uri, user, password);
-            System.out.println("Connexion établie.");
+            // System.out.println("Connexion établie.");
         } catch (SQLException e) {
             System.out.println("Une erreur est survenue lors de la connexion. Contenu: " + e.getMessage());
         }
@@ -70,42 +72,42 @@ public class BaseController {
     }
 
     // Méthode pour récupérer les données de résultat de l'étudiant en fonction du numéro de matricule
-    protected Boolean getResult(String matricule) {
-        Connection connection = connection();
+    protected Data getResult(String matricule) {
+        try {
+        	Integer.parseInt(matricule);
+        	
+        	Connection connection = connection();
 
-        if (connection != null) {
-            String query = "SELECT * FROM resultat INNER JOIN etudiant "
-                    + "WHERE resultat.matricule_etudiant = etudiant.matricule "
-                    + "AND resultat.matricule_etudiant = ?";
-            try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-                pstmt.setString(1, matricule);
-                ResultSet rs = pstmt.executeQuery();
+            if (connection != null) {
+                String query = "SELECT * FROM resultat INNER JOIN etudiant "
+                        + "WHERE resultat.matricule_etudiant = etudiant.matricule "
+                        + "AND resultat.matricule_etudiant = ?";
+                try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+                    pstmt.setString(1, matricule);
+                    ResultSet rs = pstmt.executeQuery();
 
-                if (rs.next()) {
-                    data = new Data();
-                    data.setNom(rs.getString("nom"));
-                    data.setPnom(rs.getString("prenoms"));
-                    data.setMatricule(rs.getString("matricule"));
-                    data.setDate_naissance(rs.getString("date_naissance"));
-                    data.setEcole(rs.getString("ecole"));
-                    data.setMoyenne(rs.getDouble("moyenne"));
-                    data.setStatut_examen(rs.getBoolean("statut"));
-
-                    return true;
-                } else {
-                    alert = new Alert(AlertType.INFORMATION);
-                    alert.setTitle("Information");
-                    alert.setContentText("Matricule non reconnu.");
+                    if (rs.next()) {
+                        data = new Data();
+                        data.setNom(rs.getString("nom"));
+                        data.setPnom(rs.getString("prenoms"));
+                        data.setMatricule(rs.getString("matricule"));
+                        data.setDate_naissance(rs.getString("date_naissance"));
+                        data.setEcole(rs.getString("ecole"));
+                        data.setMoyenne(rs.getDouble("moyenne"));
+                        data.setStatut_examen(rs.getBoolean("statut"));
+                    } else {
+                    	noDataFoundError = true;
+                    }
+                } catch (SQLException e) {
+                	sqlError = true;
+                	System.err.println(e.getMessage());
                 }
-            } catch (SQLException e) {
-                alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Erreur");
-                alert.setContentText("Erreur lors de l'exécution de la requête.\n"
-                        + "Message: " + e.getMessage());
             }
+        } catch (NumberFormatException e) {
+        	// do nothing
         }
 
-        return false;
+        return data;
     }
 
     // Méthode pour naviguer entre différents écrans de l'application

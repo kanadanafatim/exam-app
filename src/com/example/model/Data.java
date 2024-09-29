@@ -1,4 +1,4 @@
-package com.something.model;
+package com.example.model;
 
 
 public class Data {

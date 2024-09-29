@@ -2,13 +2,15 @@
  * 
  */
 module ExamApp {
+	requires transitive javafx.graphics;
 	requires javafx.fxml;
 	requires javafx.base;
-	requires javafx.graphics;
 	requires javafx.controls;
 	requires java.sql;
+	requires org.junit.jupiter.api;
+	requires org.assertj.core;
 	
-	exports com.something;
-	opens com.something to javafx.fxml;
-	opens com.something.controllers.ui to javafx.fxml;
+	exports com.example;
+	opens com.example to javafx.fxml;
+	opens com.example.controllers.ui to javafx.fxml;
 }
