@@ -20,8 +20,8 @@ Lorsqu’il clique sur "Afficher les détails" l’application affiche :
 
   
 # Prototype commenté de la base de données
-Nom de la base de données : db0072493<br>
-TABLES :<br><br>
+Nom de la base de données : `db0072493`<br>
+
 ### etudiant <br>
 -	matricule : stocke le matricule de l’étudiant.
 -	nom : stocke le nom de l’étudiant.
